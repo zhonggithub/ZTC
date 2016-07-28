@@ -319,7 +319,7 @@ class Common{
     }
 
     convertQueryCriteria(criteria, isDefault){
-        let dbCriteria = {where:{}};
+        let dbCriteria = {};
 
         let filterAttributeArray = [];
         for(let condition in criteria){
@@ -347,7 +347,7 @@ class Common{
                 case "createdAt":
                 case "modifiedAt":
                 {
-                    dbCriteria['where'][condition] = {};
+                    dbCriteria[condition] = {};
                     let beginStr = criteria[condition][0];
                     let endStr = criteria[condition][criteria[condition].length - 1];
                     if (beginStr === "[" || beginStr === "(" || beginStr === "{") {
@@ -356,37 +356,37 @@ class Common{
                         array = array.split(',');
                         if (beginStr === '[' && endStr === ']') { //数组字符串
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>='] = new Date(array[0]);
+                                dbCriteria[condition]['>='] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<='] = new Date(array[1]);
+                                dbCriteria[condition]['<='] = new Date(array[1]);
                             }
                         } else if (beginStr === '(' && endStr === ']') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>'] = new Date(array[0]);
+                                dbCriteria[condition]['>'] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<='] = new Date(array[1]);
+                                dbCriteria[condition]['<='] = new Date(array[1]);
                             }
                         } else if (beginStr === '[' && endStr === ')') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>='] = new Date(array[0]);
+                                dbCriteria[condition]['>='] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<'] = new Date(array[1]);
+                                dbCriteria[condition]['<'] = new Date(array[1]);
                             }
                         } else if (beginStr === '(' && endStr === ')') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>'] = new Date(array[0]);
+                                dbCriteria[condition]['>'] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<'] = new Date(array[1]);
+                                dbCriteria[condition]['<'] = new Date(array[1]);
                             }
                         } else if (beginStr === '{' && endStr === '}') {
-                            dbCriteria['where'][condition] = array;
+                            dbCriteria[condition] = array;
                         }
                     } else {
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                     }
 
                     filterAttributeArray.push(condition);
@@ -395,35 +395,37 @@ class Common{
                     break;
                 case "name":{
                     if (criteria[condition].indexOf('*') == -1)
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                     else {
                         let reg = /\*/g;
                         let str = criteria[condition].replace(reg, '%');
-                        dbCriteria['where'][condition] = {'like': str};
+                        dbCriteria[condition] = {'like': str};
                     }
                     filterAttributeArray.push(condition);
                     break;
                 }break;
                 default:
                     if(isDefault){
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                         filterAttributeArray.push(condition);
                     }
                     break;
             }
         }
 
-        filterAttributeArray.forEach(function(item){
-            if(criteria.hasOwnProperty(item)){
-                delete criteria[item];
-            }
-        });
+        criteria = this.filterData(criteria, filterAttributeArray);
+
+        // filterAttributeArray.forEach(function(item){
+        //     if(criteria.hasOwnProperty(item)){
+        //         delete criteria[item];
+        //     }
+        // });
 
         return dbCriteria;
     }
 
     convertCountCriteria(criteria, isDefault){
-        let dbCriteria = {where:{}};
+        let dbCriteria = {};
 
         for(let condition in criteria){
             switch(condition){
@@ -434,7 +436,7 @@ class Common{
                 case "modifiedAt":
                 case "expand":
                 {
-                    dbCriteria['where'][condition] = {};
+                    dbCriteria[condition] = {};
                     let beginStr = criteria[condition][0];
                     let endStr = criteria[condition][criteria[condition].length - 1];
                     if (beginStr === "[" || beginStr === "(" || beginStr === "{") {
@@ -443,53 +445,53 @@ class Common{
                         array = array.split(',');
                         if (beginStr === '[' && endStr === ']') { //数组字符串
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>='] = new Date(array[0]);
+                                dbCriteria[condition]['>='] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<='] = new Date(array[1]);
+                                dbCriteria[condition]['<='] = new Date(array[1]);
                             }
                         } else if (beginStr === '(' && endStr === ']') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>'] = new Date(array[0]);
+                                dbCriteria[condition]['>'] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<='] = new Date(array[1]);
+                                dbCriteria[condition]['<='] = new Date(array[1]);
                             }
                         } else if (beginStr === '[' && endStr === ')') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>='] = new Date(array[0]);
+                                dbCriteria[condition]['>='] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<'] = new Date(array[1]);
+                                dbCriteria[condition]['<'] = new Date(array[1]);
                             }
                         } else if (beginStr === '(' && endStr === ')') {
                             if (array[0] != ' ' && array[0] != '') {
-                                dbCriteria['where'][condition]['>'] = new Date(array[0]);
+                                dbCriteria[condition]['>'] = new Date(array[0]);
                             }
                             if (array[1] != ' ' && array[1] != '') {
-                                dbCriteria['where'][condition]['<'] = new Date(array[1]);
+                                dbCriteria[condition]['<'] = new Date(array[1]);
                             }
                         } else if (beginStr === '{' && endStr === '}') {
-                            dbCriteria['where'][condition] = array;
+                            dbCriteria[condition] = array;
                         }
                     } else {
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                     }
                 }break;
                 case "account":
                 case "name":{
                     if (criteria[condition].indexOf('*') == -1)
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                     else {
                         let reg = /\*/g;
                         let str = criteria[condition].replace(reg, '%');
-                        dbCriteria['where'][condition] = {'like': str};
+                        dbCriteria[condition] = {'like': str};
                     }
                     break;
                 }break;
                 default:
                     if(isDefault)
-                        dbCriteria['where'][condition] = criteria[condition];
+                        dbCriteria[condition] = criteria[condition];
                     break;
             }
         }
