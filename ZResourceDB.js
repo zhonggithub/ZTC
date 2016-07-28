@@ -6,7 +6,7 @@
  * CreatedAt: 2016/7/22
  * Description:
  */
-const log = require('./log');
+const logger = require('./log');
 const ZCommon = require('./ZCommon');
 const common = new ZCommon();
 
@@ -20,7 +20,7 @@ class ZResourceDB{
     createResource(dbInfo, callback) {
         packageOfResourceDBImp.getModule().create(dbInfo, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -31,7 +31,7 @@ class ZResourceDB{
     updateResource(criteria, dbInfo, callback) {
         packageOfResourceDBImp.getModule().update(criteria, dbInfo, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -42,7 +42,7 @@ class ZResourceDB{
     resetStatus(criteria, dbInfo, callback){
         packageOfResourceDBImp.getModule().update(criteria, dbInfo, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -53,7 +53,7 @@ class ZResourceDB{
     retrieveResource(criteria, callback) {
         packageOfResourceDBImp.getModule().findOne(criteria, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -64,7 +64,7 @@ class ZResourceDB{
     deleteResource(criteria, callback) {
         packageOfResourceDBImp.getModule().destroy(criteria, function (err) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -75,7 +75,7 @@ class ZResourceDB{
     logicDeleteResource(criteria, callback){
         packageOfResourceDBImp.getModule().update(criteria, {deleteFlag: 1}, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -86,7 +86,7 @@ class ZResourceDB{
     queryResource(queryStr, callback) {
         packageOfResourceDBImp.getModule().query(queryStr, function (err, model) {
             if (err) {
-                log.getInstance().logger().error(err);
+                logger.error(err);
                 callback(common.dbError(err));
                 return;
             }
@@ -97,8 +97,8 @@ class ZResourceDB{
     findResource(criteria, callback){
         packageOfResourceDBImp.getModule().find(criteria, function(err, model){
             if(err) {
+                logger.error(err);
                 callback(common.dbError(err));
-                log.getInstance().logger().error(err);
                 return;
             }
             callback(null, model);
@@ -108,8 +108,8 @@ class ZResourceDB{
     count(criteria, callback){
         packageOfResourceDBImp.getModule().count(criteria, function(err, model){
             if(err){
+                logger.error(err);
                 callback(common.dbError(err));
-                log.getInstance().logger().error(err);
                 return;
             }
             callback(null, model);
