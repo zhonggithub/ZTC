@@ -73,7 +73,7 @@ class ZResourceDB{
     }
 
     logicDeleteResource(criteria, callback){
-        packageOfResourceDBImp.getModule().update(criteria, {status: 0}, function (err, model) {
+        packageOfResourceDBImp.getModule().update(criteria, {deleteFlag: 1}, function (err, model) {
             if (err) {
                 log.getInstance().logger().error(err);
                 callback(common.dbError(err));

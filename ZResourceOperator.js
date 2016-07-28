@@ -9,23 +9,23 @@
 'use strict';
 
 const ZCommon = require('./ZCommon');
-const common = new ZCommon();
 let packageOfOperatorImp = {
 };
 let imp = {};
 
 class ZResourceOperator{
-    constructor(resourceDB, ResourceLogicInfo, ResourceDBInfo, convertQueryCriteria, convertCountCriteria){
+    constructor(resourceDB, ResourceLogicInfo, ResourceDBInfo, ResourceUpdateDBInfo, convertQueryCriteria, convertCountCriteria){
         packageOfOperatorImp.resourceDB = resourceDB;
         packageOfOperatorImp.convertQueryCriteria = convertQueryCriteria;
         packageOfOperatorImp.convertCountCriteria = convertCountCriteria ? convertCountCriteria : convertQueryCriteria ;
         packageOfOperatorImp.ResourceLogicInfo = ResourceLogicInfo;
         packageOfOperatorImp.ResourceDBInfo = ResourceDBInfo;
+        packageOfOperatorImp.ResourceUpdateDBInfo = ResourceUpdateDBInfo ? ResourceUpdateDBInfo : ResourceDBInfo;
 
         imp = new Proxy(packageOfOperatorImp, {
             get: function(target, property) {
                 if (property in target) {
-                    if(!target[property])
+                    if(target[property] != undefined && target[property] != '')
                         return function(data){return data};
                     else
                         return target[property];
@@ -62,8 +62,8 @@ class ZResourceOperator{
         });
     }
 
-    retrieveResource(uuid, callback){
-        imp.resourceDB.retrieveResource({uuid: uuid}, function(error, result){
+    retrieveResource(id, callback){
+        imp.resourceDB.retrieveResource({id: id}, function(error, result){
             if(error){
                 callback(error);
                 return;
@@ -72,8 +72,8 @@ class ZResourceOperator{
         });
     }
 
-    deleteResource(uuid, callback){
-        imp.resourceDB.deleteResource({uuid: uuid}, function(error, result){
+    deleteResource(id, callback){
+        imp.resourceDB.deleteResource({id: id}, function(error, result){
             if(error){
                 callback(error);
                 return;
@@ -82,8 +82,8 @@ class ZResourceOperator{
         });
     }
 
-    logicDeleteResource(uuid, callback){
-        imp.resourceDB.logicDeletePlace({uuid: uuid}, function(error, result){
+    logicDeleteResource(id, callback){
+        imp.resourceDB.logicDeletePlace({id: id}, function(error, result){
             if(error){
                 callback(error);
                 return;
