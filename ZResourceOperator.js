@@ -25,7 +25,7 @@ class ZResourceOperator{
         imp = new Proxy(packageOfOperatorImp, {
             get: function(target, property) {
                 if (property in target) {
-                    if(target[property] != undefined && target[property] != '')
+                    if(target[property] == undefined && target[property] == '')
                         return function(data){return data};
                     else
                         return target[property];
